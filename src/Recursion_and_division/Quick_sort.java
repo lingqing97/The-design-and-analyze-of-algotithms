@@ -44,11 +44,40 @@ private static void exchange(int[] a,int x,int y)
 }
 public static void main(String[] args) {
 	Random random=new Random(1000);
-	int[] a=new int[20];
-	for(int i=0;i<20;i++)
-		a[i]=random.nextInt(100);
+	int[] a=new int[100];
+	for(int i=0;i<100;i++)
+		a[i]=random.nextInt(1000);
+	long starttime=System.nanoTime();
 	sort(a,0,a.length-1);
-	for(int i=0;i<20;i++)
-		System.out.print(a[i]+" ");
+	long endtime=System.nanoTime();
+	System.out.print("快速排序100个数据所花时间:\n");
+	System.out.print((endtime-starttime)+"ns");
+	
+	a=new int[1000];
+	for(int i=0;i<1000;i++)
+		a[i]=random.nextInt(1000);
+	starttime=System.nanoTime();
+	sort(a,0,a.length-1);
+	endtime=System.nanoTime();
+	System.out.print("\n快速排序1000个数据所花时间:\n");
+	System.out.print((endtime-starttime)+"ns");
+	
+	a=new int[10000];
+	for(int i=0;i<10000;i++)
+		a[i]=random.nextInt(100000);
+	starttime=System.nanoTime();
+	sort(a,0,a.length-1);
+	endtime=System.nanoTime();
+	System.out.print("\n快速排序10000个数据所花时间:\n");
+	System.out.print((endtime-starttime)+"ns");
+	
+	a=new int[100000];
+	for(int i=0;i<100000;i++)
+		a[i]=random.nextInt(100000);
+	starttime=System.nanoTime();
+	sort(a,0,a.length-1);
+	endtime=System.nanoTime();
+	System.out.print("\n快速排序100000个数据所花时间:\n");
+	System.out.print((endtime-starttime)+"ns");
 }
 }
