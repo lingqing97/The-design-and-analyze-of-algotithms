@@ -48,66 +48,71 @@ public class HuffmanCode {
 		}
 	}
 	public static class MinHeap {
-		public static Comparable[] pq;
-		public static int n;
-	    private MinHeap() { }
-	    public static void initialize(Comparable[] w,int nn)
-	    {
-	    	pq=w;
-	    	n=nn;
-	    }
-	    public static void sort() {
-	        for (int k = n/2; k >= 1; k--)
-	            sink(k, n);
-	        while (n > 1) {
-	            exch(1, n--);
-	            sink(1, n);
-	        }
-	    }
-	    private static void sink(int k, int n) {
-	        while (2*k <= n) {
-	            int j = 2*k;
-	            if (j < n && less(j, j+1)) j++;
-	            if (!less( k, j)) break;
-	            exch( k, j);
-	            k = j;
-	        }
-	    }
-	    private static void swim(int k)
-	    {
-	    	while(k>1&&less(k/2,k))
-	    	{
-	    		exch(k/2,k);
-	    		k=k/2;
-	    	}
-	    }
-	    private static boolean less(int i, int j) {
-	        return pq[i-1].compareTo(pq[j-1]) < 0;
-	    }
-	    
-	    private static void exch(int i, int j) {
-	        Comparable swap = pq[i-1];
-	        pq[i-1] = pq[j-1];
-	        pq[j-1] = swap;
-	    }
-	    private static void show(Comparable[] a) {
-	        for (int i = 0; i < a.length; i++) {
-	            StdOut.println(a[i]);
-	        }
-	    }
-	    public static void put(Comparable v)
-	    {
-	    	pq[++n]=v;
-	    	swim(n);
-	    }
-	    public static Comparable removeMin()
-	    {
-	    	Comparable min=pq[1];
-	    	exch(1,n--);
-	    	pq[n+1]=null;
-	    	sink(1,n);
-	    	return min;
-	    }
+		private Comparable[] pq;
+		private int N;
+		public MinHeap(int max) {
+			pq=new Comparable[max+1];
+			N=0;
+		}
+		public void put(Comparable tmp)
+		{
+			if((N+1)==pq.length) resize(pq.length*2);
+			pq[++N]=tmp;
+			swin(N);
+		}
+		public Comparable removeMin()
+		{
+			Comparable key=pq[1];
+			exch(1, N--);
+			if(N>0&&N==pq.length/4) resize(pq.length/2);
+			pq[N+1]=' ';
+			sink(1);
+			return key;
+		}
+		public boolean isEmpty()
+		{
+			return N==0;
+		}
+		public int size()
+		{
+			return N;
+		}
+		private void resize(int max)
+		{
+			Comparable[] temp=new Comparable[max];
+			for(int i=0;i<=N;i++)
+				temp[i]=pq[i];
+			pq=temp;
+		}
+		private boolean less(Comparable x,Comparable y)
+		{
+			return x.compareTo(y)<0;
+		}
+		private void exch(int x,int y)
+		{
+			Comparable temp=pq[x];
+			pq[x]=pq[y];
+			pq[y]=temp;
+		}
+		private void swin(int k)
+		{
+			while(k>1&&less(pq[k],pq[k/2]))
+			{
+				exch(k/2, k);
+				k/=2;
+			}
+		}
+		private void sink(int k)
+		{
+			while(2*k<=N)
+			{
+				int j=2*k;
+				if(j<N&&less(pq[j+1], pq[j])) j++;
+				if(!less(pq[j], pq[k])) break;
+				exch(k, j);
+				k=j;
+			}
+		}
 	}
 	public static Bintree huffmanTree(float[] f,char[] ch)
 	{
@@ -121,8 +126,9 @@ public class HuffmanCode {
 			w[i+1]=new Huffman(x,f[i]);
 		}
 		//建优先队列
-		MinHeap H=new MinHeap();
-		H.initialize(w, n);
+		MinHeap H=new MinHeap(n);
+		for(int i=1;i<=n;i++)
+			H.put(w[i]);
 		
 		//反复合并最小频率树
 		for(int i=1;i<n;i++)
