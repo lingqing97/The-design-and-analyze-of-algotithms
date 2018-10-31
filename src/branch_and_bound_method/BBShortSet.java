@@ -80,7 +80,7 @@ public static class MinHeap {
 	{
 		Comparable key=pq[1];
 		exch(1, N--);
-		if(N>0&&N==pq.length/4) resize(pq.length/2);
+//		if(N>0&&N==pq.length/4) resize(pq.length/2);
 		pq[N+1]=' ';
 		sink(1);
 		return key;
